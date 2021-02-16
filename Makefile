@@ -15,3 +15,7 @@ build:	## Create imudtchain binary
 local-test:  ## Start a local network
 	- cp .env fabric-samples/test-network/docker
 	- bash ./local-network.sh
+
+help:
+	@echo "---------------- HELP ---------------------"
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/\://'| sed -e 's/##//'
