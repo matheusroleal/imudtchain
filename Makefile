@@ -2,7 +2,7 @@ setup-go:	## Install all the necessary Go packages
 	go get github.com/hyperledger/fabric-contract-api-go/contractapi
 
 setup-python:	## Install all the necessary python packages
-	go get github.com/hyperledger/fabric-contract-api-go/contractapi
+	pip install -r requirements.txt
 
 setup-fabric:	## Install all the necessary Fabric packages
 	curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
