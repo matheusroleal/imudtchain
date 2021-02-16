@@ -48,7 +48,7 @@ echo " "
 
 peer lifecycle chaincode queryinstalled
 
-export CC_PACKAGE_ID=basic_1.0:bac96adc7517e5428b78f2f035dd5b893c1a434a60bb4c862ea554bd757573f8
+CC_PACKAGE_ID=`peer lifecycle chaincode queryinstalled | grep "Package ID" | awk 'BEGIN { FS = "Package ID:" } ; { print $2 }' | awk 'BEGIN { FS = " " } ; { print $1 }' | awk 'BEGIN { FS = "," } ; { print $1 }'`
 echo $CC_PACKAGE_ID
 
 peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --channelID mychannel --name basic --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1 --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
@@ -71,3 +71,9 @@ peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride o
 peer lifecycle chaincode querycommitted --channelID mychannel --name basic --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses localhost:9051 --tlsRootCertFiles ${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"function":"InitLedger","Args":[]}'
+
+echo " "
+echo "######## Checking chaincode initiation ########"
+echo " "
+
+peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}'
